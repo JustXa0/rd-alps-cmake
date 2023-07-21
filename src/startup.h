@@ -2,13 +2,14 @@
 
 #include <windows.h>
 
-namespace startup
+class startup
 {
-    class startup
-    {
-        public:
+    public:
+        
+    startup(HWND hWnd, HINSTANCE hInst, HWND& hLabel);
 
-        private:
+    private:
+    HWND CreateCursorPosLabel(HWND hWnd, HINSTANCE hInst);
 
-    };
-}
+};
+

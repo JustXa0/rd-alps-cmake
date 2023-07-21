@@ -5,3 +5,4 @@
 #include "monitorInfoManager.h"
 #include "textWriter.h"
 #include "integerWriter.h"
+#include "startup.h"

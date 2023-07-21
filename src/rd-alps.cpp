@@ -23,7 +23,6 @@ ATOM                MyRegisterClass(HINSTANCE hInstance);
 BOOL                InitInstance(HINSTANCE, int);
 LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK    About(HWND, UINT, WPARAM, LPARAM);
-HWND                CreateCursorPosLabel(HWND);
 void                OpenConsoleWindow();
 void                CloseConsoleWindow();
 
@@ -128,26 +127,6 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
     return TRUE;
 }
 
-HWND CreateCursorPosLabel(HWND hWnd)
-{
-    RECT rect;
-    GetClientRect(hWnd, &rect);
-
-    // Calculate the position for the label control at the bottom of the window
-    int xPos = rect.left;
-    int yPos = rect.bottom - 20;
-    int width = rect.right - rect.left;
-    int height = 20;
-
-    // Create the label control with WS_VISIBLE flag set to FALSE
-    HWND hLabel = CreateWindow(L"STATIC", NULL, WS_CHILD, xPos, yPos, width, height, hWnd, NULL, hInst, NULL);
-
-    // Set the label control's properties
-    SetWindowText(hLabel, L"CURSOR POSITION:");
-    SendMessage(hLabel, WM_SETFONT, reinterpret_cast<WPARAM>(GetStockObject(DEFAULT_GUI_FONT)), MAKELPARAM(TRUE, 0));
-
-    return hLabel;
-}
 
 
 
@@ -168,9 +147,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     {
     case WM_CREATE:
     {
-
-
-        hCursorPosLabel = CreateCursorPosLabel(hWnd);
+        startup myStartup(hWnd, hInst, hCursorPosLabel);
 
         HMENU hMenu = CreateMenu();
         HMENU hSubMenu = CreatePopupMenu();

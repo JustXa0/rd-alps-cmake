@@ -1,3 +1,4 @@
 #CMake compiler files
 out/
 .vs/
+.vscode/

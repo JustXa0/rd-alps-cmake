@@ -22,9 +22,9 @@ endif()
 project ("Project ALPS CMake")
 
 # Add source to this project's executable.
-add_executable (CMakeTarget WIN32 "src/rd-alps.cpp" "src/rd-alps.h" "src/framework.h" "src/targetver.h" "src/Text/textWriter.cpp" "src/headers/Text/textWriter.h" "src/Monitor/monitorInfoManager.cpp" "src/headers/Monitor/monitorInfoManager.h" "src/Capture/screenCapture.cpp" "src/headers/Capture/screenCapture.h" "src/Number/integerWriter.cpp" "src/headers/Number/integerWriter.h" "src/Device/deviceIDGenerator.cpp" "src/headers/Device/deviceIDGenerator.h" "src/resource.h" "src/Monitor/monitorSelection.cpp" "src/headers/Monitor/monitorSelection.h"  "src/Device/deviceIDGenerator.cpp" "src/headers/Device/deviceIDGenerator.h" "src/rd-alps.rc" "src/rd-alps.ico" "src/small.ico" "src/startup.cpp" "src/startup.h")
+add_executable (CMakeTarget WIN32 "src/rd-alps.cpp" "src/Text/textWriter.cpp" "src/Monitor/monitorInfoManager.cpp" "src/Capture/screenCapture.cpp" "src/Number/integerWriter.cpp" "src/Device/deviceIDGenerator.cpp" "src/Monitor/monitorSelection.cpp" "src/Device/deviceIDGenerator.cpp" "src/rd-alps.rc" "src/rd-alps.ico" "src/small.ico" "src/startup.cpp" "src/Console/console.cpp")
 
-target_include_directories (CMakeTarget PRIVATE ${CMAKE_SOURCE_DIR}/src/headers/Text ${CMAKE_SOURCE_DIR}/src/headers/Capture ${CMAKE_SOURCE_DIR}/src/headers/Encyption ${CMAKE_SOURCE_DIR}/src/headers/Monitor ${CMAKE_SOURCE_DIR}/src/headers/Number ${CMAKE_SOURCE_DIR}/src/headers/Device ${CMAKE_SOURCE_DIR}/src)
+target_include_directories (CMakeTarget PRIVATE ${CMAKE_SOURCE_DIR}/src/headers/Text ${CMAKE_SOURCE_DIR}/src/headers/Capture ${CMAKE_SOURCE_DIR}/src/headers/Encyption ${CMAKE_SOURCE_DIR}/src/headers/Monitor ${CMAKE_SOURCE_DIR}/src/headers/Number ${CMAKE_SOURCE_DIR}/src/headers/Device ${CMAKE_SOURCE_DIR}/headers/Console ${CMAKE_SOURCE_DIR}/src)
 target_link_directories (CMakeTarget PRIVATE "C:/Program Files (x86)/Windows Kits/10/Include/(WindowsSDKVersion)")
 
 target_sources(CMakeTarget PRIVATE "src/rd-alps.rc")

@@ -16,15 +16,16 @@ bool isDragging = false;                        // boolean for dragging function
 POINT dragStartPos;                             // point for storing start
 bool isHovering = false;                        // boolean for storing hovering
 bool checked = true;                            // boolean for storing checks
-bool console = false;                           // boolean for storing console status
+bool con = false;                           // boolean for storing console status
 
 // Forward declarations of functions included in this code module:
 ATOM                MyRegisterClass(HINSTANCE hInstance);
 BOOL                InitInstance(HINSTANCE, int);
 LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK    About(HWND, UINT, WPARAM, LPARAM);
-void                OpenConsoleWindow();
-void                CloseConsoleWindow();
+
+// Initialize objects
+console myConsole;
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     _In_opt_ HINSTANCE hPrevInstance,
@@ -268,7 +269,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
         std::wstring cursorPosStr = L"X: " + std::to_wstring(cursorPos.x) + L", Y: " + std::to_wstring(cursorPos.y);
         SetWindowText(hCursorPosLabel, cursorPosStr.c_str());
-        if (console)
+        if (con)
         {
             std::wcout << L"X: " + std::to_wstring(cursorPos.x) + L", Y: " + std::to_wstring(cursorPos.y) << std::endl;
         }
@@ -293,15 +294,15 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     {
         if (wParam == VK_OEM_3)
         {
-            if (!console)
+            if (!con)
             {
-                OpenConsoleWindow();
-                console = true;
+                myConsole.startConsole();
+                con = true;
             }
             else
             {
-                CloseConsoleWindow();
-                console = false;
+                myConsole.endConsole();
+                con = false;
             }
         }
     }
@@ -329,29 +330,4 @@ INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
         }        break;
     }
     return (INT_PTR)FALSE;
-}
-
-void OpenConsoleWindow()
-{
-
-    AllocConsole();
-
-    HANDLE consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
-    int fileDescriptor = _open_osfhandle(reinterpret_cast<intptr_t>(consoleHandle), _O_TEXT);
-    FILE* consoleFile = _fdopen(fileDescriptor, "w");
-    *stdout = *consoleFile;
-    setvbuf(stdout, nullptr, _IONBF, 0);
-
-    // Redirect stdout to the console
-    freopen_s(&consoleFile, "CONOUT$", "w", stdout);
-}
-
-void CloseConsoleWindow()
-{
-    // flush and close stdout
-    fflush(stdout);
-    fclose(stdout);
-
-    // free the console
-    FreeConsole();
 }

@@ -6,3 +6,4 @@
 #include "textWriter.h"
 #include "integerWriter.h"
 #include "startup.h"
+#include "console.h"

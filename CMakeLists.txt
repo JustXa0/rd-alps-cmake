@@ -21,15 +21,27 @@ endif()
 
 project ("Project ALPS CMake")
 
+
 # Add source to this project's executable.
 add_executable (CMakeTarget WIN32 "src/rd-alps.cpp" "src/Text/textWriter.cpp" "src/Monitor/monitorInfoManager.cpp" "src/Capture/screenCapture.cpp" "src/Number/integerWriter.cpp" "src/Device/deviceIDGenerator.cpp" "src/Monitor/monitorSelection.cpp" "src/Device/deviceIDGenerator.cpp" "src/rd-alps.rc" "src/rd-alps.ico" "src/small.ico" "src/startup.cpp" "src/Console/console.cpp")
 
-target_include_directories (CMakeTarget PRIVATE ${CMAKE_SOURCE_DIR}/src/headers/Text ${CMAKE_SOURCE_DIR}/src/headers/Capture ${CMAKE_SOURCE_DIR}/src/headers/Encyption ${CMAKE_SOURCE_DIR}/src/headers/Monitor ${CMAKE_SOURCE_DIR}/src/headers/Number ${CMAKE_SOURCE_DIR}/src/headers/Device ${CMAKE_SOURCE_DIR}/headers/Console ${CMAKE_SOURCE_DIR}/src)
+# Find ffmpeg libraries and header files in local workspace
+find_path(FFMPEG_INCLUDE_DIRS libavcodec/avcodec.h PATHS ${CMAKE_SOURCE_DIR}/lib/ffmpeg/include)
+find_library(FFMPEG_LIBRARIES avcodec avformat avutil swscale PATHS ${CMAKE_SOURCE_DIR}/lib/ffmkpeg/debug/lib)
+
+# Check if FFMPEG was found
+# if(NOT FFMPEG_INCLUDE_DIRS OR NOT FFMPEG_LIBRARIES)
+#    message(FATAL_ERROR "FFMPEG library not found. Make sure you have placed the ffmpeg headers and libraries in the correct location.")
+# endif()
+
+target_include_directories (CMakeTarget PRIVATE ${CMAKE_SOURCE_DIR}/src/headers/Text ${CMAKE_SOURCE_DIR}/src/headers/Capture ${CMAKE_SOURCE_DIR}/src/headers/Encyption ${CMAKE_SOURCE_DIR}/src/headers/Monitor ${CMAKE_SOURCE_DIR}/src/headers/Number ${CMAKE_SOURCE_DIR}/src/headers/Device ${CMAKE_SOURCE_DIR}/src/headers/Console ${CMAKE_SOURCE_DIR}/src ${FFMPEG_INCLUDE_DIRS})
 target_link_directories (CMakeTarget PRIVATE "C:/Program Files (x86)/Windows Kits/10/Include/(WindowsSDKVersion)")
 
 target_sources(CMakeTarget PRIVATE "src/rd-alps.rc")
 
 set_source_files_properties("src/rd-alps.rc" PROPERTIES WIN32_EXECUTABLE TRUE)
+
+set_target_properties(CMakeTarget PROPERTIES OUTPUT_NAME "Project ALPS")
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
   set_property(TARGET CMakeTarget PROPERTY CXX_STANDARD 20)

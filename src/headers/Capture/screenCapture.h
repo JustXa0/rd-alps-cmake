@@ -5,10 +5,8 @@
 #include <string>
 #include <cstdint>
 #include <cassert>
+#include <ctime>
 
-extern "C" {
-    #include <libavformat/avformat.h>
-}
-
+//#include <cuviddec.h>
 
 

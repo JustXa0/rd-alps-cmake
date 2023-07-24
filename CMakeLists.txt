@@ -40,7 +40,7 @@ set(CONSOLE "src/Console/console.cpp" "src/headers/Console/console.h")
 # Add Capture Sources
 set(CAPTURE "src/Capture/screenCapture.cpp" "src/headers/Capture/screenCapture.h")
 
-set_target_properties(${CAPTURE} PROPERTIES CUDA_SEPARABLE_COMPILATION ON CUDA_STANDARD 11 CUDA_STANDARD_REQUIRED ON CUDA_EXTENSIONS OFF)
+set_target_properties(${CAPTURE} PROPERTIES CUDA_SEPARABLE_COMPILATION ON CUDA_STANDARD 12 CUDA_STANDARD_REQUIRED ON CUDA_EXTENSIONS OFF)
 
 # Add source to this project's executable.
 add_executable (alps WIN32 ${CAPTURE} ${CONSOLE} ${DEVICE} ${NUMBER} ${MONITOR} ${TEXT} "src/rd-alps.cpp" "src/rd-alps.rc" "src/rd-alps.ico" "src/small.ico" "src/startup.cpp" "src/startup.h")

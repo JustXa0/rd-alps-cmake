@@ -7,6 +7,14 @@
 #include <cassert>
 #include <ctime>
 
-// #include <cuviddec.h>
+#include <nvEncodeAPI.h>
+
+class screenCapture
+{
+    public:
+
+        screenCapture();
+        ~screenCapture();
+};
 
 

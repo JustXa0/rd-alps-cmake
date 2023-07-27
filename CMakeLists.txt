@@ -19,10 +19,6 @@ if (WIN32)
 	add_definitions(-DUNICODE -D_UNICODE)
 endif()
 
-# Include Nvidia headers
-# target_include_directories(alps PRIVATE ${CMAKE_SOURCE_DIR}/lib/Nvidia/Interface)
-
-
 # Add Text sources
 set(TEXT "src/Text/textWriter.cpp" "src/headers/Text/textWriter.h")
 
@@ -39,15 +35,17 @@ set(DEVICE "src/Device/deviceIDGenerator.cpp" "src/headers/Device/deviceIDGenera
 set(CONSOLE "src/Console/console.cpp" "src/headers/Console/console.h")
 
 # Add Capture Sources
-# set(CAPTURE "src/Capture/screenCapture.cpp" "src/headers/Capture/screenCapture.h")
+set(CAPTURE "src/Capture/screenCapture.cpp" "src/headers/Capture/screenCapture.h")
 
 # set_target_properties(${CAPTURE} PROPERTIES CUDA_SEPARABLE_COMPILATION ON CUDA_STANDARD 12 CUDA_STANDARD_REQUIRED ON CUDA_EXTENSIONS OFF)
 
 # Add source to this project's executable.
 add_executable (alps WIN32 ${CAPTURE} ${CONSOLE} ${DEVICE} ${NUMBER} ${MONITOR} ${TEXT} "src/rd-alps.cpp" "src/rd-alps.rc" "src/rd-alps.ico" "src/small.ico" "src/startup.cpp" "src/startup.h")
 
-target_include_directories (alps PRIVATE ${CMAKE_SOURCE_DIR}/src/headers/Text ${CMAKE_SOURCE_DIR}/src/headers/Capture ${CMAKE_SOURCE_DIR}/src/headers/Encyption ${CMAKE_SOURCE_DIR}/src/headers/Monitor ${CMAKE_SOURCE_DIR}/src/headers/Number ${CMAKE_SOURCE_DIR}/src/headers/Device ${CMAKE_SOURCE_DIR}/src/headers/Console ${CMAKE_SOURCE_DIR}/src ${CMAKE_SOURCE_DIR}/lib/ffmpeg/include/libavcodec ${CMAKE_SOURCE_DIR}/lib/ffmpeg/include/libavdevice ${CMAKE_SOURCE_DIR}/lib/ffmpeg/include/libavfilter ${CMAKE_SOURCE_DIR}/lib/ffmpeg/include/libavformat ${CMAKE_SOURCE_DIR}/lib/ffmpeg/include/libavutil ${CMAKE_SOURCE_DIR}/lib/ffmpeg/include/libswresample ${CMAKE_SOURCE_DIR}/lib/ffmpeg/include/libswscale) 
-# target_link_directories (alps PRIVATE "C:/Program Files (x86)/Windows Kits/10/Include/(WindowsSDKVersion)")
+target_include_directories (alps PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/headers/Text ${CMAKE_CURRENT_SOURCE_DIR}/src/headers/Capture ${CMAKE_CURRENT_SOURCE_DIR}/src/headers/Encyption ${CMAKE_CURRENT_SOURCE_DIR}/src/headers/Monitor ${CMAKE_CURRENT_SOURCE_DIR}/src/headers/Number ${CMAKE_CURRENT_SOURCE_DIR}/src/headers/Device ${CMAKE_CURRENT_SOURCE_DIR}/src/headers/Console ${CMAKE_CURRENT_SOURCE_DIR}/src)
+# Include Nvidia headers
+target_include_directories(alps PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/lib/Nvidia/Interface)
+target_link_libraries(alps PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/lib/Nvidia/Lib/nvcuvid.lib ${CMAKE_CURRENT_SOURCE_DIR}/lib/Nvidia/Lib/nvencodeapi.lib) 
 
 target_sources(alps PRIVATE "src/rd-alps.rc")
 

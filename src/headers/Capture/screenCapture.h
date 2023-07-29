@@ -8,13 +8,17 @@
 #include <ctime>
 
 #include <nvEncodeAPI.h>
+#include <cuda.h>
 
 class screenCapture
 {
+    private:
+        
+
     public:
 
-        screenCapture();
-        ~screenCapture();
+        bool initialize(CUcontext cuContext, CUdevice cuDevice);
+        bool deInitialize(CUcontext cuContext, CUdevice cuDevice);
 };
 
 

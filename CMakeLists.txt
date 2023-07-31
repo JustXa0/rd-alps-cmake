@@ -45,6 +45,9 @@ target_include_directories (ALPS BEFORE PRIVATE
   ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
 
+# Link libraries built in the src/C++ file directory
+target_link_libraries (ALPS PRIVATE CONSOLE DEVICE MONITOR NUMBER TEXT)
+
 target_sources (ALPS PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/rd-alps.rc)
 
-set_source_files_properties (${CMAKE_CURRENT_SOURCE_DIR}/src/rc-alps.rc PROPERTIES WIN32_EXECUTABLE TRUE)
+set_source_files_properties (${CMAKE_CURRENT_SOURCE_DIR}/src/rd-alps.rc PROPERTIES WIN32_EXECUTABLE TRUE)

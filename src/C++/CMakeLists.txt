@@ -10,28 +10,28 @@ endif ()
 
 # Start of library building
 add_library (
-    CONSOLE SHARED
+    CONSOLE 
     ${CMAKE_CURRENT_SOURCE_DIR}/Console/console.cpp
     )
 
 add_library (
-    DEVICE SHARED
+    DEVICE 
     ${CMAKE_CURRENT_SOURCE_DIR}/Device/deviceIDGenerator.cpp
     )
 
 add_library (
-    MONITOR SHARED
+    MONITOR 
     ${CMAKE_CURRENT_SOURCE_DIR}/Monitor/monitorInfoManager.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/Monitor/monitorSelection.cpp
 )
 
 add_library (
-    NUMBER SHARED
+    NUMBER 
     ${CMAKE_CURRENT_SOURCE_DIR}/Number/integerWriter.cpp
 )
 
 add_library (
-    TEXT SHARED
+    TEXT 
     ${CMAKE_CURRENT_SOURCE_DIR}/Text/textWriter.cpp
 )
 

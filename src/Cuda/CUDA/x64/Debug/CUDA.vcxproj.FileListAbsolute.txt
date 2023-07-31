@@ -1,1 +1,0 @@
-G:\ALPS CMake\src\Cuda\CUDA\x64\Debug\CUDA.exe

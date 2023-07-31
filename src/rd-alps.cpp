@@ -16,7 +16,7 @@ bool isDragging = false;                        // boolean for dragging function
 POINT dragStartPos;                             // point for storing start
 bool isHovering = false;                        // boolean for storing hovering
 bool checked = true;                            // boolean for storing checks
-bool con = false;                           // boolean for storing console status
+bool con = false;                               // boolean for storing console status
 
 // Forward declarations of functions included in this code module:
 ATOM                MyRegisterClass(HINSTANCE hInstance);

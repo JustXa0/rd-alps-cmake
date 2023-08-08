@@ -124,6 +124,8 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
     ShowWindow(hCursorPosLabel, nCmdShow);
     UpdateWindow(hCursorPosLabel);
 
+    
+
 
     return TRUE;
 }
@@ -159,6 +161,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         CheckMenuItem(hSubMenu, IDM_MY_SELECTION, MF_UNCHECKED);
 
         SetMenu(hWnd, hMenu);
+
+        enumerateDisplayDevices devices;
 
     }
     break;

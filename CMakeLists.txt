@@ -1,7 +1,7 @@
 # CMakeList.txt : CMake project for Project ALPS, include source and define
 # project specific logic here.
 #
-cmake_minimum_required (VERSION 3.12)
+cmake_minimum_required (VERSION 3.27)
 
 
 # Enable Hot Reload for MSVC compilers if supported.
@@ -15,9 +15,15 @@ if (WIN32)
   add_definitions (-DUNICODE -D_UNICODE)
 endif ()
 
-# set (CMAKE_CUDA_ARCHITECTURES "80;86;87")
+# Set C++ standard for CUDA
+if (NOT DEFINED CMAKE_CUDA_STANDARD)
+  set (CMAKE_CUDA_STANDARD 12.2)
+  set (CMAKE_CUDA_STANDARD REQUIRED)
+endif ()
 
-project ("ALPS" LANGUAGES C CXX)
+set (CMAKE_CUDA_ARCHITECTURES "80;86;87")
+
+project ("ALPS" LANGUAGES C CXX )
 
 # Add C++ source files
 add_subdirectory (${CMAKE_CURRENT_SOURCE_DIR}/src/C++/)
@@ -47,6 +53,9 @@ target_include_directories (ALPS BEFORE PRIVATE
 
 # Link libraries built in the src/C++ file directory
 target_link_libraries (ALPS PRIVATE CONSOLE DEVICE MONITOR NUMBER TEXT)
+
+# Link DirectX libraries
+target_link_libraries(ALPS PRIVATE DXGI)
 
 target_sources (ALPS PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/rd-alps.rc)
 

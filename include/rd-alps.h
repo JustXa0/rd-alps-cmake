@@ -7,3 +7,4 @@
 #include "integerWriter.h"
 #include "startup.h"
 #include "console.h"
+#include "enumerateDisplayDevices.h"

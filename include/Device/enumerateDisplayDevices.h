@@ -1,19 +1,20 @@
-#include <Windows.h>    //Win32 API
-#include <dxgil_2.h>    //DirectX API
-#include <iostream>     //Standard C header
+#include <Windows.h>    // Win32 API header
+#include <dxgi.h>       // DirectX API header
+#include <iostream>     // Standard C header
+#include <vector>       // Standard C header
 
 class enumerateDisplayDevices
 {
     private:
 
-        typedef struct Devices
+        struct Devices
         {
             DWORD cb;
             std::vector<CHAR> DeviceName [32];
             std::vector<CHAR> DeviceString [128];
             std::vector<CHAR> DeviceID [128];
             std::vector<CHAR> DeviceKey [128];
-        }
+        };
 
     public:
 
@@ -26,4 +27,4 @@ class enumerateDisplayDevices
         CHAR getDeviceKey(int index);
 
 
-}
+};

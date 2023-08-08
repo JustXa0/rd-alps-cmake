@@ -1,7 +1,7 @@
 # CMakeLists.txt : Project logic for building all C++ source files
 #
 
-cmake_minimum_required (VERSION 3.12)
+cmake_minimum_required (VERSION 3.27)
 
 # Set compiler files
 if (WIN32)
@@ -17,6 +17,7 @@ add_library (
 add_library (
     DEVICE 
     ${CMAKE_CURRENT_SOURCE_DIR}/Device/deviceIDGenerator.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/Device/enumerateDisplayDevices.cpp
     )
 
 add_library (
@@ -45,6 +46,6 @@ include_directories (
     ${CMAKE_CURRENT_SOURCE_DIR}/../../include/Number/
     ${CMAKE_CURRENT_SOURCE_DIR}/../../include/Text/
     ${CMAKE_CURRENT_SOURCE_DIR}/../../include/
-    )
+)
 
 set_directory_properties (PROPERTIES CXX_STANDARD 20)

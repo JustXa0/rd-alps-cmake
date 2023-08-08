@@ -48,12 +48,12 @@ target_include_directories (ALPS BEFORE PRIVATE
   ${CMAKE_CURRENT_SOURCE_DIR}/include/Device
   ${CMAKE_CURRENT_SOURCE_DIR}/include/Monitor
   ${CMAKE_CURRENT_SOURCE_DIR}/include/Text
-  ${CMAKE_CURRENT_SOURCE_DIR}/include/Log
   ${CMAKE_CURRENT_SOURCE_DIR}/include
+  ${CMAKE_CURRENT_SOURCE_DIR}/lib/spdlog/include/
 )
 
 # Link libraries built in the src/C++ file directory
-target_link_libraries (ALPS PRIVATE CONSOLE DEVICE MONITOR NUMBER TEXT LOG)
+target_link_libraries (ALPS PRIVATE CONSOLE DEVICE MONITOR NUMBER TEXT)
 
 # Link DirectX libraries
 target_link_libraries(ALPS PRIVATE DXGI)

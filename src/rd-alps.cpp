@@ -123,9 +123,6 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
     UpdateWindow(hWnd);
     ShowWindow(hCursorPosLabel, nCmdShow);
     UpdateWindow(hCursorPosLabel);
-
-    int num = 7;
-    Logger::getInstance().log(num);
     
     return TRUE;
 }

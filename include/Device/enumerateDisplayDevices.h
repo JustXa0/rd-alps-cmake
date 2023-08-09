@@ -2,7 +2,7 @@
 #include <dxgi.h>       // DirectX API header
 #include <iostream>     // Standard C header
 #include <vector>       // Standard C header
-#include "spdlog/sinks/basic_file_sink.h"
+
 
 class enumerateDisplayDevices
 {

@@ -1,7 +1,7 @@
 #include "enumerateDisplayDevices.h"
 
 enumerateDisplayDevices::enumerateDisplayDevices()
-{
+{  
     DISPLAY_DEVICE displayDevice;
     Devices devices;
     devices.cb = sizeof(DISPLAY_DEVICE);
@@ -30,9 +30,21 @@ enumerateDisplayDevices::enumerateDisplayDevices()
                     std::wcout << "Adapter Description: " << adapterDesc.Description << std::endl;
                     std::wcout << "Dedicated Video Memory: " << adapterDesc.DedicatedVideoMemory / (1024 * 1024) << " MB" << std::endl;
                 }
+                else
+                {
+                    // TODO: handle error here and log at highest level
+                }
                 pDXGIAdapter->Release();
             }
+            else
+            {
+                // TODO: handle error here and log at highest level
+            }
             pDXGIFactory->Release();
+        }
+        else
+        {
+            // TODO: handle error here and log at highest level
         }
 
     }

@@ -3,6 +3,8 @@
 #include <iostream>     // Standard C header
 #include <vector>       // Standard C header
 
+#include "log.h"        // Logging system
+
 
 class enumerateDisplayDevices
 {

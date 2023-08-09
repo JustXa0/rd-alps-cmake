@@ -124,14 +124,9 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
     ShowWindow(hCursorPosLabel, nCmdShow);
     UpdateWindow(hCursorPosLabel);
 
-    // Logging initializiation
-
-    auto logger = spdlog::basic_logger_mt("Test", "logs/basic-log.txt", true);
-    logger->warn("This is a warning for testing purposes.");
-
+    int num = 7;
+    Logger::getInstance().log(num);
     
-
-
     return TRUE;
 }
 
@@ -167,8 +162,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
         SetMenu(hWnd, hMenu);
 
-        enumerateDisplayDevices devices;
-
+        enumerateDisplayDevices devices;        
+        
     }
     break;
     case WM_COMMAND:

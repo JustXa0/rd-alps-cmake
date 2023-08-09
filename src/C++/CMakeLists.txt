@@ -36,6 +36,11 @@ add_library (
     ${CMAKE_CURRENT_SOURCE_DIR}/Text/textWriter.cpp
 )
 
+add_library(
+    LOG
+    ${CMAKE_CURRENT_SOURCE_DIR}/Log/log.cpp   
+)
+
 include_directories (
     ${CMAKE_CURRENT_SOURCE_DIR}/../../include/Capture/
     ${CMAKE_CURRENT_SOURCE_DIR}/../../include/Console/

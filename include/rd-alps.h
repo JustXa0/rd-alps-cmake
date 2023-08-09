@@ -2,11 +2,7 @@
 
 #include <iostream>
 
-#include <spdlog/spdlog.h>      // Header for logging system
-#include <spdlog/cfg/env.h>     // Support for loading levels from environment variable
-#include <spdlog/fmt/ostr.h>    // Support for user defined types
-#include "spdlog/sinks/basic_file_sink.h"
-
+#include "log.h"
 #include "resource.h"
 #include "monitorInfoManager.h"
 #include "textWriter.h"

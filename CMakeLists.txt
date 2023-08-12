@@ -1,11 +1,16 @@
-cmake_minimum_required (VERSION 3.26)
+cmake_minimum_required (VERSION 3.20 FATAL_ERROR)
 
-project ("alps" LANGUAGES CXX)
+project ("alps" LANGUAGES CXX CUDA)
+
+set(CMAKE_CUDA_STANDARD 14)
 
 add_executable (
     ALPS
     ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp
+    #${CMAKE_CURRENT_SOURCE_DIR}/src/hello.cu
 )
+
+set_target_properties(ALPS PROPERTIES CUDA_SEPARABLE_COMPILATION ON)
 
 target_include_directories (
     ALPS PRIVATE

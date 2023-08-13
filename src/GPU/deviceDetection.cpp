@@ -2,15 +2,20 @@
 
 Monitor::Monitor()
 {
-
+    RetrieveDisplayArea();
     RetrieveFriendlyName();
     RetrieveWorkArea();
+    mInfo.size = mInfo.friendlyName.size();
 
-    std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
-    std::string utf8_str = converter.to_bytes(mInfo.friendlyName.at(0));
-
-    Logger::getInstance().log_i(utf8_str);
-
+    for (int i = 0; i < mInfo.size; i++)
+    {
+        Logger::getInstance().log_i(mInfo.friendlyName.at(i));
+        Logger::getInstance().log_i(mInfo.displayArea.at(i).right - mInfo.displayArea.at(i).left);
+        Logger::getInstance().log_i(mInfo.displayArea.at(i).bottom - mInfo.displayArea.at(i).top);
+        Logger::getInstance().log_i(mInfo.workArea.at(i).right - mInfo.displayArea.at(i).left);
+        Logger::getInstance().log_i(mInfo.workArea.at(i).bottom - mInfo.displayArea.at(i).top);
+    }
+    
 }
 
 bool Monitor::RetrieveFriendlyName()
@@ -68,6 +73,41 @@ bool Monitor::RetrieveFriendlyName()
     return true;
 }
 
+bool Monitor::RetrieveDisplayArea()
+{
+    HMONITOR hMonitor = MonitorFromPoint(POINT{0, 0}, MONITOR_DEFAULTTOPRIMARY);
+    MONITORINFOEX monitorInfo;
+    monitorInfo.cbSize = sizeof(MONITORINFOEX);
+
+    if (!GetMonitorInfo(hMonitor, &monitorInfo))
+    {
+        Logger::getInstance().log_e("ERROR OCCURED FINDING PRIMARY HARDWARE HANDLE");
+        return false;
+    }
+
+    BOOL enumResult = EnumDisplayMonitors(nullptr, nullptr, [](HMONITOR hMonitor, HDC, LPRECT, LPARAM lParam) -> BOOL
+    {
+        MONITORINFOEX monitorInfo;
+        monitorInfo.cbSize = sizeof(MONITORINFOEX);
+        if (!GetMonitorInfo(hMonitor, &monitorInfo))
+        {
+            Logger::getInstance().log_i("No additional monitors found");
+            return FALSE;
+        }
+
+        MonitorInfo& info = *reinterpret_cast<MonitorInfo*>(lParam);
+        info.displayArea.push_back(monitorInfo.rcMonitor);
+    }, reinterpret_cast<LPARAM>(&mInfo));
+
+    if (!enumResult)
+    {
+        Logger::getInstance().log_e("ERROR OCCURRED DURING MONITOR ENUMERATION");
+        return false;
+    }
+    
+    return true;
+}
+
 bool Monitor::RetrieveWorkArea()
 {
     HMONITOR hMonitor = MonitorFromPoint(POINT{0, 0}, MONITOR_DEFAULTTOPRIMARY);
@@ -101,5 +141,32 @@ bool Monitor::RetrieveWorkArea()
         return false;
     }
 
+    return true;
+}
+
+// TODO: implement error handling in the following methods:
+// GetIndex, GetFriendlyName, GetDisplayArea, GetWorkArea
+
+bool Monitor::GetIndex(uint16_t& index)
+{
+    index = mInfo.size;
+    return true;
+}
+
+bool Monitor::GetFriendlyName(uint16_t index, std::wstring& nameOut)
+{
+    nameOut = mInfo.friendlyName.at(index);
+    return true;
+}
+
+bool Monitor::GetDisplayArea(uint16_t index, RECT& displayOut)
+{
+    displayOut = mInfo.displayArea.at(index);
+    return true;
+}
+
+bool Monitor::GetWorkArea(uint16_t index, RECT& workOut)
+{
+    workOut = mInfo.workArea.at(index);
     return true;
 }

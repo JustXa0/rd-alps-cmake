@@ -8,6 +8,7 @@ add_executable (
     ALPS
     ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Log/logger.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/GPU/deviceDetection.cpp
     #${CMAKE_CURRENT_SOURCE_DIR}/src/hello.cu
 )
 

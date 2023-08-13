@@ -1,5 +1,6 @@
 #include <GLFW/glfw3.h>
 #include "logger.h"
+#include "deviceDetection.h"
 #include <nvEncodeAPI.h>
 
 int main() {
@@ -19,6 +20,8 @@ int main() {
     {
         Logger::getInstance().log_i("Hello World!");
     }
+
+    Monitor::Monitor();
 
     // Main loop
     while (!glfwWindowShouldClose(window)) {

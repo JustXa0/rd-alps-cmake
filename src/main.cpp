@@ -1,4 +1,5 @@
 #include <GLFW/glfw3.h>
+#include "logger.h"
 
 int main() {
     // Initialize GLFW
@@ -11,6 +12,10 @@ int main() {
     if (!window) {
         glfwTerminate();
         return -1;
+    }
+    else
+    {
+        Logger::getInstance().log_i("Hello World!");
     }
 
     // Main loop

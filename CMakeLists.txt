@@ -17,6 +17,7 @@ target_include_directories (
     ALPS BEFORE PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/lib/spdlog/include/
     ${CMAKE_CURRENT_SOURCE_DIR}/lib/glfw/include/
+    ${CMAKE_CURRENT_SOURCE_DIR}/lib/NVIDIA/Video_Codec_SDK_12.1.14/interface/
 
     # User-made headers
     ${CMAKE_CURRENT_SOURCE_DIR}/include/
@@ -25,4 +26,6 @@ target_include_directories (
 target_link_libraries (
     ALPS PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/lib/glfw/build/src/Debug/glfw3.lib
+    ${CMAKE_CURRENT_SOURCE_DIR}/lib/NVIDIA/Video_Codec_SDK_12.1.14/Lib/Win32/nvcuvid.lib
+    ${CMAKE_CURRENT_SOURCE_DIR}/lib/NVIDIA/Video_Codec_SDK_12.1.14/Lib/Win32/nvencodeapi.lib
 )

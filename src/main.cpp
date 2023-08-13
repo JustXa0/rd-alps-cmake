@@ -1,5 +1,6 @@
 #include <GLFW/glfw3.h>
 #include "logger.h"
+#include <nvEncodeAPI.h>
 
 int main() {
     // Initialize GLFW
@@ -9,7 +10,8 @@ int main() {
 
     // Create a GLFW window
     GLFWwindow* window = glfwCreateWindow(800, 600, "GLFW Window", NULL, NULL);
-    if (!window) {
+    if (!window) 
+    {
         glfwTerminate();
         return -1;
     }

@@ -53,6 +53,7 @@ class GPU
 
     public:
         GPU();
+        ~GPU();
 
 
     private:

@@ -208,6 +208,13 @@ GPU::GPU()
     Logger::getInstance().log_i(gInfo.hardwareId.at(0));
 }
 
+GPU::~GPU()
+{
+    pDXGIFactory->Release();
+
+    pDXGIAdapter->Release();
+}
+
 bool GPU::RetrieveVendorId()
 {
     pDXGIFactory->EnumAdapters(0, &pDXGIAdapter);

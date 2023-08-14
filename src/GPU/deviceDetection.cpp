@@ -144,29 +144,90 @@ bool Monitor::RetrieveWorkArea()
     return true;
 }
 
-// TODO: implement error handling in the following methods:
-// GetIndex, GetFriendlyName, GetDisplayArea, GetWorkArea
-
 bool Monitor::GetIndex(uint16_t& index)
 {
+    if (mInfo.size == NULL || mInfo.size == 0)
+    {
+        Logger::getInstance().log_e("MONITOR INFO STRUCTURE UNINITIALIZED");
+        return false;
+    }
+
     index = mInfo.size;
     return true;
 }
 
 bool Monitor::GetFriendlyName(uint16_t index, std::wstring& nameOut)
 {
+    if (mInfo.size < index)
+    {
+        Logger::getInstance().log_e("INDEX OUT OF REACH");
+        return false;
+    }
+
     nameOut = mInfo.friendlyName.at(index);
     return true;
 }
 
 bool Monitor::GetDisplayArea(uint16_t index, RECT& displayOut)
 {
+    if (mInfo.size < index)
+    {
+        Logger::getInstance().log_e("INDEX OUT OF REACH");
+        return false;
+    }
+
     displayOut = mInfo.displayArea.at(index);
     return true;
 }
 
 bool Monitor::GetWorkArea(uint16_t index, RECT& workOut)
 {
+    if (mInfo.size < index)
+    {
+        Logger::getInstance().log_e("INDEX OUT OF REACH");
+        return false;
+    }
+
     workOut = mInfo.workArea.at(index);
+    return true;
+}
+
+// Begin GPU class defining
+
+GPU::GPU()
+{
+    pDXGIFactory = nullptr;
+    HRESULT hr = CreateDXGIFactory(__uuidof(IDXGIFactory), (void**)&pDXGIFactory);
+
+    pDXGIAdapter = nullptr;
+
+    RetrieveHardwareId();
+    RetrieveVendorId();
+
+    Logger::getInstance().log_i(gInfo.vendorId.at(0));
+    Logger::getInstance().log_i(gInfo.hardwareId.at(0));
+}
+
+bool GPU::RetrieveVendorId()
+{
+    pDXGIFactory->EnumAdapters(0, &pDXGIAdapter);
+
+    DXGI_ADAPTER_DESC adapterDesc;
+    pDXGIAdapter->GetDesc(&adapterDesc);
+
+    gInfo.vendorId.push_back(adapterDesc.VendorId);
+    
+    return true;
+}
+
+bool GPU::RetrieveHardwareId()
+{
+    pDXGIFactory->EnumAdapters(0, &pDXGIAdapter);
+
+    DXGI_ADAPTER_DESC adapterDesc;
+    pDXGIAdapter->GetDesc(&adapterDesc);
+
+    gInfo.hardwareId.push_back(adapterDesc.DeviceId);
+
     return true;
 }

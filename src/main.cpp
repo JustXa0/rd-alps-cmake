@@ -19,6 +19,7 @@ int main() {
     }
 
     Monitor::Monitor();
+    GPU::GPU();
 
     // Main loop
     while (!glfwWindowShouldClose(window)) {

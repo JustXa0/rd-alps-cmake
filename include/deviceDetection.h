@@ -23,7 +23,8 @@ typedef struct MonitorInfo
 typedef struct GPUInfo
 {
     uint16_t                    size;
-
+    std::vector<UINT>           vendorId;
+    std::vector<UINT>           hardwareId;
 };
 
 class Monitor
@@ -56,5 +57,9 @@ class GPU
 
     private:
         GPUInfo gInfo;
+        IDXGIFactory* pDXGIFactory;
+        IDXGIAdapter* pDXGIAdapter;
+        bool RetrieveVendorId();
+        bool RetrieveHardwareId();
 
 };

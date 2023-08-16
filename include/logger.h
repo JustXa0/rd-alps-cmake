@@ -5,6 +5,7 @@
 #include <locale>           // TODO: figure out what this header is
 #include <codecvt>          // TODO: figure out what this header is
 #include <iostream>
+#include <shlobj.h>         // TODO: figure out what this header is (win32?)
 
 
 class Logger
@@ -117,6 +118,7 @@ public:
 
 private:
     Logger();
+    std::wstring GetRoamingFolder();
 
     std::shared_ptr<spdlog::logger> logger;
 };

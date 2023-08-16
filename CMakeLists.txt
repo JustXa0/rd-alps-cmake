@@ -2,7 +2,9 @@ cmake_minimum_required (VERSION 3.20 FATAL_ERROR)
 
 project ("alps" LANGUAGES CXX CUDA)
 
-find_library(NVAPI_LIBRARY NAMES nvapi64)
+find_library (NVAPI_LIBRARY NAMES nvapi64)
+
+find_package (OpenGL REQUIRED)
 
 set(CMAKE_CUDA_STANDARD 14)
 
@@ -34,9 +36,10 @@ target_link_libraries (
     ${CMAKE_CURRENT_SOURCE_DIR}/lib/NVIDIA/Video_Codec_SDK_12.1.14/Lib/x64/nvcuvid.lib
     ${CMAKE_CURRENT_SOURCE_DIR}/lib/NVIDIA/Video_Codec_SDK_12.1.14/Lib/x64/nvencodeapi.lib
     DXGI
+    
     ${CUDA_RUNTIME_LIBRARY}
     ${CMAKE_CURRENT_SOURCE_DIR}/lib/R535-Developer/amd64/nvapi64.lib
-
+    OpenGL::GL
     # Link CUDA libraries
     cudart_static
 )

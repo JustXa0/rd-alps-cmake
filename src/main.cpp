@@ -24,6 +24,11 @@ int main() {
     // Main loop
     while (!glfwWindowShouldClose(window)) {
         // Poll for and process events
+
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        glfwSwapBuffers(window);
+
         glfwPollEvents();
     }
 

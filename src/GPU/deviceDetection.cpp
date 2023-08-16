@@ -217,6 +217,8 @@ GPU::~GPU()
     pDXGIFactory->Release();
 
     pDXGIAdapter->Release();
+
+    NvAPI_Unload();
 }
 
 bool GPU::RetrieveVendorId()
@@ -245,8 +247,6 @@ bool GPU::RetrieveHardwareId()
 
 bool GPU::RetrieveDriverVersion()
 {
-    
-
     // Getting cuda version to be targeted later
     int cudaVersion;
 
@@ -254,12 +254,14 @@ bool GPU::RetrieveDriverVersion()
 
     if (cudaStatus != cudaSuccess)
     {
-        //Logger::getInstance().log_e("CUDA DRIVER QUERY FAILED: " + cudaGetErrorString(cudaStatus));
+        std::string error = cudaGetErrorString(cudaStatus);
+        Logger::getInstance().log_e("CUDA DRIVER QUERY FAILED: " + error);
         return false;
     }
 
     gInfo.cudaVersion.push_back(cudaVersion);
 
+    // TODO: Handle error for when no NvAPI is found
     NvAPI_Initialize();
 
     NvU32 driverVersion = 0;
@@ -313,5 +315,59 @@ bool GPU::RetrieveDriverVersion()
 
     //FreeLibrary(nvapiModule);
 
+    return true;
+}
+
+bool GPU::GetIndex(uint16_t& index)
+{
+    index = gInfo.size;
+    return true;
+}
+
+bool GPU::GetVendorId(uint16_t index, UINT& vendorOut)
+{
+    if (index > gInfo.size)
+    {
+        Logger::getInstance().log_e("INDEX IS HIGHER THAN STRUCT");
+        return false;
+    }
+
+    vendorOut = gInfo.vendorId.at(index);
+    return true;
+}
+
+bool GPU::GetHardwareId(uint16_t index, UINT& hardwareOut)
+{
+    if (index > gInfo.size)
+    {
+        Logger::getInstance().log_e("INDEX IS HIGHER THAN STRUCT");
+        return false;
+    }
+
+    hardwareOut = gInfo.hardwareId.at(index);
+    return true;
+}
+
+bool GPU::GetCudaVersion(uint16_t index, int& cudaOut)
+{
+    if (index > gInfo.size)
+    {
+        Logger::getInstance().log_e("INDEX IS HIGHER THAN STRUCT");
+        return false;
+    }
+
+    cudaOut = gInfo.cudaVersion.at(index);
+    return true;
+}
+
+bool GPU::GetDriverVersion(uint16_t index, int& driverOut)
+{
+    if (index > gInfo.size)
+    {
+        Logger::getInstance().log_e("INDEX IS HIGHER THAN STRUCT");
+        return false;
+    }
+
+    driverOut = gInfo.driverVersion.at(index);
     return true;
 }

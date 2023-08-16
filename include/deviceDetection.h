@@ -59,6 +59,11 @@ class GPU
         GPU();
         ~GPU();
 
+        bool GetIndex(uint16_t& index);
+        bool GetVendorId(uint16_t index, UINT& vendorOut);
+        bool GetHardwareId(uint16_t index, UINT& hardwareOut);
+        bool GetCudaVersion(uint16_t index, int& cudaOut);
+        bool GetDriverVersion(uint16_t index, int& driverOut);
 
     private:
         GPUInfo gInfo;

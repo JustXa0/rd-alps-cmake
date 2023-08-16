@@ -203,9 +203,13 @@ GPU::GPU()
 
     RetrieveHardwareId();
     RetrieveVendorId();
+    RetrieveDriverVersion();
 
     Logger::getInstance().log_i(gInfo.vendorId.at(0));
     Logger::getInstance().log_i(gInfo.hardwareId.at(0));
+    Logger::getInstance().log_i(gInfo.cudaVersion.at(0));
+    Logger::getInstance().log_i(gInfo.driverVersion.at(0));
+    //Logger::getInstance().log_i(gInfo.driverVersion.at(1));
 }
 
 GPU::~GPU()
@@ -235,6 +239,79 @@ bool GPU::RetrieveHardwareId()
     pDXGIAdapter->GetDesc(&adapterDesc);
 
     gInfo.hardwareId.push_back(adapterDesc.DeviceId);
+
+    return true;
+}
+
+bool GPU::RetrieveDriverVersion()
+{
+    
+
+    // Getting cuda version to be targeted later
+    int cudaVersion;
+
+    cudaError_t cudaStatus = cudaDriverGetVersion(&cudaVersion);
+
+    if (cudaStatus != cudaSuccess)
+    {
+        //Logger::getInstance().log_e("CUDA DRIVER QUERY FAILED: " + cudaGetErrorString(cudaStatus));
+        return false;
+    }
+
+    gInfo.cudaVersion.push_back(cudaVersion);
+
+    NvAPI_Initialize();
+
+    NvU32 driverVersion = 0;
+    NvAPI_ShortString buildBranchVersion;
+
+    NvAPI_Status status = NvAPI_SYS_GetDriverAndBranchVersion(&driverVersion, buildBranchVersion);
+
+    if (status == NVAPI_OK)
+    {
+        Logger::getInstance().log_i("Successfuly gathered driver and branch version");
+        gInfo.driverVersion.push_back(driverVersion);
+        return true;
+    }
+
+    Logger::getInstance().log_e("ERROR GATHERING DRIVER AND BRANCH VERSION");
+    return false;
+
+    // Getting Nvidia driver version to be checked later
+
+    //if (nvapiModule)
+    //{
+        //typedef int(*NvAPI_QueryInterface_t)(unsigned int offset);
+       // NvAPI_QueryInterface_t NvAPI_QueryInterface = (NvAPI_QueryInterface_t)GetProcAddress(nvapiModule, "nvapi_QueryInterface");
+
+        //if (NvAPI_QueryInterface)
+        //{
+            //typedef int(*NvAPI_SYS_GetDriverAndBranchVersion_t)(NvU32* driverVersion, NvAPI_ShortString buildBranchVersion);
+            //NvAPI_SYS_GetDriverAndBranchVersion_t NvAPI_SYS_GetDriverAndBranchVersion = (NvAPI_SYS_GetDriverAndBranchVersion_t)(*NvAPI_QueryInterface)(0x0150E828);
+
+            //if (NvAPI_SYS_GetDriverAndBranchVersion)
+            //{
+               // NvU32 driverVersion = 0;
+                //NvAPI_ShortString buildBranchString;
+
+               // if (NvAPI_SYS_GetDriverAndBranchVersion(&driverVersion, buildBranchString) == 0)
+               // {
+                 //   gInfo.driverVersion.push_back(HIWORD(driverVersion));
+                 //   gInfo.driverVersion.push_back(LOWORD(driverVersion));
+                    //Logger::getInstance().log_i("Driver Version: " + HIWORD(driverVersion) + "." + LOWORD(driverVersion));
+               // }
+
+           // }
+
+       // }
+
+    //}
+    //else
+    //{
+       // Logger::getInstance().log_e("FAILED TO LOAD nvapi64.dll");
+    //}
+
+    //FreeLibrary(nvapiModule);
 
     return true;
 }

@@ -2,6 +2,8 @@ cmake_minimum_required (VERSION 3.20 FATAL_ERROR)
 
 project ("alps" LANGUAGES CXX CUDA)
 
+find_library(NVAPI_LIBRARY NAMES nvapi64)
+
 set(CMAKE_CUDA_STANDARD 14)
 
 add_executable (
@@ -19,15 +21,22 @@ target_include_directories (
     ${CMAKE_CURRENT_SOURCE_DIR}/lib/spdlog/include/
     ${CMAKE_CURRENT_SOURCE_DIR}/lib/glfw/include/
     ${CMAKE_CURRENT_SOURCE_DIR}/lib/NVIDIA/Video_Codec_SDK_12.1.14/interface/
+    ${CMAKE_CURRENT_SOURCE_DIR}/lib/R535-Developer/
+    ${CMAKE_CUDA_TOOLKIT_INCLUDE_DIRECTORIES}
 
     # User-made headers
     ${CMAKE_CURRENT_SOURCE_DIR}/include/
 )
 
 target_link_libraries (
-    ALPS PRIVATE
+    ALPS
     ${CMAKE_CURRENT_SOURCE_DIR}/lib/glfw/build/src/Debug/glfw3.lib
-    ${CMAKE_CURRENT_SOURCE_DIR}/lib/NVIDIA/Video_Codec_SDK_12.1.14/Lib/Win32/nvcuvid.lib
-    ${CMAKE_CURRENT_SOURCE_DIR}/lib/NVIDIA/Video_Codec_SDK_12.1.14/Lib/Win32/nvencodeapi.lib
+    ${CMAKE_CURRENT_SOURCE_DIR}/lib/NVIDIA/Video_Codec_SDK_12.1.14/Lib/x64/nvcuvid.lib
+    ${CMAKE_CURRENT_SOURCE_DIR}/lib/NVIDIA/Video_Codec_SDK_12.1.14/Lib/x64/nvencodeapi.lib
     DXGI
+    ${CUDA_RUNTIME_LIBRARY}
+    ${CMAKE_CURRENT_SOURCE_DIR}/lib/R535-Developer/amd64/nvapi64.lib
+
+    # Link CUDA libraries
+    cudart_static
 )

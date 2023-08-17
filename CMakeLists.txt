@@ -13,6 +13,7 @@ add_executable (
     ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Log/logger.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/GPU/deviceDetection.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/GPU/encoding.cpp
     #${CMAKE_CURRENT_SOURCE_DIR}/src/hello.cu
 )
 

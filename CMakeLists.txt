@@ -1,10 +1,11 @@
 cmake_minimum_required (VERSION 3.20 FATAL_ERROR)
 
-project ("alps" LANGUAGES CXX CUDA)
+project ("alps" LANGUAGES CUDA CXX)
 
 find_library (NVAPI_LIBRARY NAMES nvapi64)
 
 find_package (OpenGL REQUIRED)
+find_package (CUDAToolkit REQUIRED)
 
 set(CMAKE_CUDA_STANDARD 14)
 
@@ -25,7 +26,6 @@ target_include_directories (
     ${CMAKE_CURRENT_SOURCE_DIR}/lib/glfw/include/
     ${CMAKE_CURRENT_SOURCE_DIR}/lib/NVIDIA/Video_Codec_SDK_12.1.14/interface/
     ${CMAKE_CURRENT_SOURCE_DIR}/lib/R535-Developer/
-    ${CMAKE_CUDA_TOOLKIT_INCLUDE_DIRECTORIES}
 
     # User-made headers
     ${CMAKE_CURRENT_SOURCE_DIR}/include/
@@ -36,11 +36,11 @@ target_link_libraries (
     ${CMAKE_CURRENT_SOURCE_DIR}/lib/glfw/build/src/Debug/glfw3.lib
     ${CMAKE_CURRENT_SOURCE_DIR}/lib/NVIDIA/Video_Codec_SDK_12.1.14/Lib/x64/nvcuvid.lib
     ${CMAKE_CURRENT_SOURCE_DIR}/lib/NVIDIA/Video_Codec_SDK_12.1.14/Lib/x64/nvencodeapi.lib
-    DXGI
-    
-    ${CUDA_RUNTIME_LIBRARY}
+    CUDA::cudart_static  # Link against CUDA Runtime API
+    CUDA::cuda_driver
+    #C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v12.2\\lib\\x64\\cudadevrt.lib
     ${CMAKE_CURRENT_SOURCE_DIR}/lib/R535-Developer/amd64/nvapi64.lib
     OpenGL::GL
-    # Link CUDA libraries
-    cudart_static
+    DXGI
 )
+

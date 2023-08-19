@@ -2,33 +2,31 @@
 
 Encoder::Encoder()
 {
-    status = NvEncodeAPICreateInstance(&list);
-    encodeSessionParams = {};
-    encoderSession = nullptr;
-    context = NULL;
-    device = 0;
+// Define the function pointer type based on the function signature
+typedef NVENCSTATUS(NVENCAPI *NvEncDestroyEncoderPtr)(NV_ENCODE_API_FUNCTION_LIST*);
+
+// Load the nvEncodeAPI.dll library and retrieve function pointers
+HMODULE hLibrary = LoadLibrary("nvEncodeAPI.dll");
+if (hLibrary != nullptr) {
+    // Retrieve the function pointer using the correct name (mangled)
+    NvEncDestroyEncoderPtr nvEncDestroyEncoder = reinterpret_cast<NvEncDestroyEncoderPtr>(
+        GetProcAddress(hLibrary, "NvEncodeAPIDestroyInstance"));  // Correct mangled name
     
-    if (status != NV_ENC_SUCCESS)
-    {
-        Logger::getInstance().log_e("FAILED TO CREATE NVENCODE INSTANCE");
+    if (nvEncDestroyEncoder != nullptr) {
+        // Successfully loaded function pointer, you can use it now
+        NV_ENCODE_API_FUNCTION_LIST functionList;  // Create an instance of the struct
+        NVENCSTATUS destroyStatus = nvEncDestroyEncoder(&functionList);
+        // Handle destroyStatus here
+    } else {
+        // Error handling
     }
+    
+    // Don't forget to free the library when you're done
+    FreeLibrary(hLibrary);
+} else {
+    // Error handling
+}
 
-    if (!createCudaContext(context))
-    {
-        // TODO: handle error here
-    }
-
-    encodeSessionParams.version = NV_ENC_OPEN_ENCODE_SESSION_EX_PARAMS_VER;
-    encodeSessionParams.device = context;
-    encodeSessionParams.deviceType = NV_ENC_DEVICE_TYPE_CUDA;
-
-    // Open the NVENC encode session
-    NVENCSTATUS nvEncStatus = NvEncOpenEncodeSessionEx(&encodeSessionParams, &encoderSession);
-    if (nvEncStatus != NV_ENC_SUCCESS)
-    {
-        // TODO: handle NVENC session opening error
-        Logger::getInstance().log_e("ERROR OPENING A NVENC SESSION");
-    }
 
 }
 
@@ -36,45 +34,47 @@ Encoder::~Encoder()
 {
     //Release();
     cudaDeviceReset();
-    NvEncDestroyEncoder(&encoderSession);
 }
 
-bool Encoder::createCudaContext(CUcontext cuContext)
+bool Encoder::createCudaContext()
 {
    result = cuInit(0);
-   if (result != cudaSuccess)
+   if (result != CUDA_SUCCESS)
    {
-        // Handle error here
+        // TODO: Handle error here
         return false;
    }
 
    int deviceCount = 0;
    result = cuDeviceGetCount(&deviceCount);
-   if (result != cudaSuccess)
+   if (result != CUDA_SUCCESS)
    {
-        // Handle error here
+        // TODO: Handle error here
         return false;
    }
 
    if (deviceCount == 0)
    {
-        // Handle error here
-        Logger::getInstance().log_e("NO CUDA DEVICES FOUND");
+        // no devices found
         return false;
    }
 
+   device = 0;
    result = cuDeviceGet(&device, 0);
-   if (result != cudaSuccess)
+   if (result != CUDA_SUCCESS)
    {
-        // Handle error here
+        // TODO: Handle error here
         return false;
    }
 
-    result = cuCtxCreate(&context, 0, device);
-    if (result != cudaSuccess)
-    {
-        // Handle error here
+   context = NULL;
+   result = cuCtxCreate(&context, 0, device);
+   if (result != CUDA_SUCCESS)
+   {
+        // TODO: Handle error here
         return false;
-    }
+   }
+   
+   return true;
 }
 

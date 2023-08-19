@@ -1,5 +1,6 @@
 #pragma once
 
+#include <windows.h>
 #include <nvEncodeAPI.h>
 #include <cuda.h>
 #include <cuda_runtime_api.h>
@@ -20,6 +21,7 @@ private:
     CUresult result;
     CUcontext context;
     CUdevice device;
+    HMODULE hLibrary;
 
-    bool createCudaContext(CUcontext context);
+    bool createCudaContext();
 };

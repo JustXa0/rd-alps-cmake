@@ -318,6 +318,57 @@ bool GPU::RetrieveDriverVersion()
     return true;
 }
 
+bool GPU::CreateCudaContext(CUdevice device, CUcontext context)
+{
+    CUresult result = cuInit(0);
+    if (result != CUDA_SUCCESS)
+    {
+        Logger::getInstance().log_e("COULD NOT INITIALIZE CUDA DRIVER API");
+        return false;
+    }
+
+    int deviceCount = 0;
+    result = cuDeviceGetCount(&deviceCount);
+    if (result != CUDA_SUCCESS)
+    {
+        Logger::getInstance().log_e("DID NOT FIND ANY CUDA DEVICES");
+        return false;
+    }
+
+    if (deviceCount == 0)
+    {
+        Logger::getInstance().log_e("DID NOT FIND ANY CUDA DEVICES");
+        return false;
+    }
+
+    if (device != 0)
+    {
+        Logger::getInstance().log_e("DEVICE WAS NOT PROPERLY INITALIZED");
+        return false;
+    }
+    result = cuDeviceGet(&device, 0);
+    if (result != CUDA_SUCCESS)
+    {
+        Logger::getInstance().log_e("COULD NOT FIND CUDA DEVICE AT POINT 1 (GPU 0)");
+        return false;
+    }
+
+    if (context != NULL)
+    {
+        Logger::getInstance().log_e("CONTEXT WAS NOT PROPERLY INITALIZED");
+        return false;
+    }
+    result = cuCtxCreate(&context, 0, device);
+    if (result != CUDA_SUCCESS)
+    {
+        Logger::getInstance().log_e("COULD NOT CREATE FLOATING CUDA CONTEXT");
+        return false;
+    }
+
+    Logger::getInstance().log_i("Floating CUDA context created successfully");
+    return true;
+}
+
 bool GPU::GetIndex(uint16_t& index)
 {
     index = gInfo.size;

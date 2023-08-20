@@ -20,6 +20,7 @@ int main() {
 
     Monitor::Monitor();
     GPU::GPU();
+    Encoder::Encoder();
 
     // Main loop
     while (!glfwWindowShouldClose(window)) {

@@ -1,7 +1,8 @@
 #pragma once
 
 #include <Windows.h>            // Win32 API header
-#include <cuda_runtime_api.h>   // CUDA runtime API header
+#include <cuda.h>               // CUDA header
+#include <cuda_runtime.h>   // CUDA runtime API header
 #include <nvapi.h>              // NVAPI header
 #include <dxgi.h>               // DirectX API header
 #include <vector>               // Standard C header
@@ -28,7 +29,7 @@ typedef struct GPUInfo
     std::vector<UINT>           vendorId;
     std::vector<UINT>           hardwareId;
     std::vector<int>            cudaVersion;
-    std::vector<int>            driverVersion;   
+    std::vector<int>            driverVersion;  
 };
 
 class Monitor
@@ -64,6 +65,7 @@ class GPU
         bool GetHardwareId(uint16_t index, UINT& hardwareOut);
         bool GetCudaVersion(uint16_t index, int& cudaOut);
         bool GetDriverVersion(uint16_t index, int& driverOut);
+        static bool CreateCudaContext(CUdevice device, CUcontext context);
 
     private:
         GPUInfo gInfo;

@@ -26,6 +26,7 @@ target_include_directories (
     ${CMAKE_CURRENT_SOURCE_DIR}/lib/glfw/include/
     ${CMAKE_CURRENT_SOURCE_DIR}/lib/NVIDIA/Video_Codec_SDK_12.1.14/interface/
     ${CMAKE_CURRENT_SOURCE_DIR}/lib/R535-Developer/
+    ${CMAKE_CUDA_TOOLKIT_INCLUDE_DIRECTORIES}
 
     # User-made headers
     ${CMAKE_CURRENT_SOURCE_DIR}/include/
@@ -34,11 +35,10 @@ target_include_directories (
 target_link_libraries (
     ALPS
     ${CMAKE_CURRENT_SOURCE_DIR}/lib/glfw/build/src/Debug/glfw3.lib
-    ${CMAKE_CURRENT_SOURCE_DIR}/lib/NVIDIA/Video_Codec_SDK_12.1.14/Lib/x64/nvcuvid.lib
-    ${CMAKE_CURRENT_SOURCE_DIR}/lib/NVIDIA/Video_Codec_SDK_12.1.14/Lib/x64/nvencodeapi.lib
     CUDA::cudart_static  # Link against CUDA Runtime API
     CUDA::cuda_driver
-    #C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v12.2\\lib\\x64\\cudadevrt.lib
+    ${CMAKE_CURRENT_SOURCE_DIR}/lib/NVIDIA/Video_Codec_SDK_12.1.14/Lib/x64/nvcuvid.lib
+    ${CMAKE_CURRENT_SOURCE_DIR}/lib/NVIDIA/Video_Codec_SDK_12.1.14/Lib/x64/nvencodeapi.lib
     ${CMAKE_CURRENT_SOURCE_DIR}/lib/R535-Developer/amd64/nvapi64.lib
     OpenGL::GL
     DXGI

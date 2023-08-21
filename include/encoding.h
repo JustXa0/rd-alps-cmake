@@ -1,9 +1,13 @@
 #pragma once
 
-#include <windows.h>
-#include <nvEncodeAPI.h>
+#include <Windows.h>
 #include <cuda.h>
 #include <cuda_runtime.h>
+#include <nvapi.h>
+#include <nvEncodeAPI.h>
+#include <dxgi.h>
+#include <mutex>
+#include <stdint.h>
 
 #include "logger.h"
 #include "deviceDetection.h"
@@ -25,3 +29,4 @@ private:
     bool InitializeNVEncoder(CUcontext context);
 
 };
+

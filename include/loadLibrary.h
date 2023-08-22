@@ -3,12 +3,18 @@
 #include <windows.h>
 #include <nvEncodeAPI.h>
 
-namespace loadLibrary
+#include "logger.h"
+
+class Loader
 {
-    class Nvidia
-    {
-        public:
-            Nvidia(LPCWSTR libraryName);
-            ~Nvidia();
-    };
-}
+
+    public:
+        Loader();
+        ~Loader();
+
+        bool loadLibrary(LPCWSTR libraryName);
+        bool GetLibrary(HMODULE* libraryOut);
+    
+    private:
+        HMODULE hLibrary;
+};

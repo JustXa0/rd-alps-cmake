@@ -20,7 +20,7 @@ int main() {
 
     Monitor::Monitor();
     GPU::GPU();
-    Encoder::Encoder();
+    Encoder encoder;
 
     // Main loop
     while (!glfwWindowShouldClose(window)) {
@@ -34,6 +34,7 @@ int main() {
     }
 
     // Cleanup and exit
+    encoder.~Encoder();
     glfwDestroyWindow(window);
     glfwTerminate();
     return 0;

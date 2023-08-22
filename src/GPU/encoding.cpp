@@ -4,13 +4,25 @@
 
 Encoder::Encoder()
 {
-    
-
     device = 0;
     context = NULL;
 
-    GPU::CreateCudaContext(device, context);
-    Encoder::InitializeNVEncoder(context);
+    loader.loadLibrary(L"nvEncodeAPI64.dll");
+    loader.GetLibrary(&hLibrary);
+
+    encodeParams = {};
+
+    encodeParams.version = NV_ENCODE_API_FUNCTION_LIST_VER;
+    encodeParams.reserved = 0;
+    encodeParams.apiVersion = NVENCAPI_VERSION;
+
+    if(GPU::CreateCudaContext(device, context))
+    {
+        encodeParams.device = context;
+        encodeParams.deviceType = NV_ENC_DEVICE_TYPE_CUDA;
+        Encoder::InitializeNVEncoder(context);
+    }
+    
 }
 
 Encoder:: ~Encoder()
@@ -29,36 +41,52 @@ Encoder:: ~Encoder()
  */
 bool Encoder::InitializeNVEncoder(CUcontext contextIn)
 {
-   HMODULE hLibrary = LoadLibrary("nvEncodeAPI.dll");
+    typedef NVENCSTATUS(NVENCAPI *PFN_NVENC_CREATE_INSTANCE)(NV_ENCODE_API_FUNCTION_LIST*);  // Function pointer type
+    typedef NVENCSTATUS(NVENCAPI *PFN_NVENC_OPEN_ENCODE_SESSION_EX)(NV_ENC_OPEN_ENCODE_SESSION_EX_PARAMS*, void**);
+    typedef NVENCSTATUS(NVENCAPI *PFN_NVENCDESTROYENCODER)(void*);
    
-   if (hLibrary == NULL) {
-       Logger::getInstance().log_e("ERROR LOADING nvEncodeAPI.dll");
-       return false;
-   }
-   
-   typedef NVENCSTATUS(__cdecl *PFN_NVENC_CREATE_INSTANCE)(NV_ENCODE_API_FUNCTION_LIST*);  // Function pointer type
-   
-   PFN_NVENC_CREATE_INSTANCE NvEncodeAPICreateInstance = (PFN_NVENC_CREATE_INSTANCE)GetProcAddress(hLibrary, "NvEncodeAPICreateInstance");
-   
-   if (NvEncodeAPICreateInstance == NULL) {
-       Logger::getInstance().log_e("ERROR GETTING NvEncodeAPICreateInstance FUNCTION");
-       FreeLibrary(hLibrary);
-       return false;
-   }
-   
-   NV_ENCODE_API_FUNCTION_LIST functionList;
+    PFN_NVENC_CREATE_INSTANCE NvEncodeAPICreateInstance = (PFN_NVENC_CREATE_INSTANCE)GetProcAddress(hLibrary, "NvEncodeAPICreateInstance");
+    PFN_NVENC_OPEN_ENCODE_SESSION_EX NvEncOpenEncodeSessionEx = (PFN_NVENC_OPEN_ENCODE_SESSION_EX)GetProcAddress(hLibrary, "NvEncOpenEncodeSessionEx");
+    PFN_NVENCDESTROYENCODER NvEncDestroyEncoder = (PFN_NVENCDESTROYENCODER)GetProcAddress(hLibrary, "NvEncDestroyEncoder");
+
+    if (NvEncodeAPICreateInstance == NULL) {
+        Logger::getInstance().log_e("ERROR GETTING NvEncodeAPICreateInstance FUNCTION");
+        FreeLibrary(hLibrary);
+        return false;
+    }
+
    if (NvEncodeAPICreateInstance(&functionList) != NV_ENC_SUCCESS) {
        Logger::getInstance().log_e("ERROR CREATING NVENCODEAPI INSTANCE");
-       FreeLibrary(hLibrary);
+       loader.~Loader();
        return false;
    }
+
+    if (functionList.nvEncOpenEncodeSessionEx(&encodeParams, &encodePointer) != NV_ENC_SUCCESS)
+    {
+        Logger::getInstance().log_e("ERROR OPENING ENCODE SESSION");
+        functionList.nvEncDestroyEncoder(encodePointer);
+        loader.~Loader();
+        return false;
+    }
    
-   // ... Continue with the rest of the code using the functionList and other variables
-   
-   // Cleanup
-   FreeLibrary(hLibrary);
-   
-   return true;
-   
+    // Initialization was successful, ending the function
+    Logger::getInstance().log_i("NVEncoder initialized, starting tuning selection");
+    
+    uint32_t encodeProfileGUIDCount;
+    if (functionList.nvEncGetEncodeGUIDCount(encodePointer, &encodeProfileGUIDCount) != NV_ENC_SUCCESS)
+    {
+        Logger::getInstance().log_e("ERROR GETTING ENCODE GUID COUNT");
+        functionList.nvEncDestroyEncoder(encodePointer);
+        loader.~Loader();
+        return false;
+    }
+
+    GUID* guidArray = new GUID[encodeProfileGUIDCount];
+    if (functionList.nvEncGetEncodeGUIDs(encodePointer, guidArray, encodeProfileGUIDCount, NULL) != NV_ENC_SUCCESS)
+    {
+        Logger::getInstance().log_e("ERROR GETTING ENCODE GUIDS");
+        functionList.nvEncDestroyEncoder(encodePointer);
+        loader.~Loader();
+        return false;
+    }
 }
-   

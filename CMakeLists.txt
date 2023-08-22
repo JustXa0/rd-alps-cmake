@@ -8,6 +8,10 @@ find_package (OpenGL REQUIRED)
 find_package (CUDAToolkit REQUIRED)
 
 if (WIN32)
+    add_definitions (-DUNICODE -D_UNICODE)
+endif ()
+
+if (WIN32)
     if(CMAKE_SIZEOF_VOID_P EQUAL 8)
         Set(CUVID_LIB ${CMAKE_CURRENT_SOURCE_DIR}/lib/NVIDIA/Video_Codec_SDK_12.1.14/Lib/x64/nvcuvid.lib)
         set(NVENCODEAPI_LIB ${CMAKE_CURRENT_SOURCE_DIR}/lib/NVIDIA/Video_Codec_SDK_12.1.14/Lib/x64/nvencodeapi.lib)

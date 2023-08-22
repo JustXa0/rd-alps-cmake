@@ -11,6 +11,7 @@
 
 #include "logger.h"
 #include "deviceDetection.h"
+#include "loadLibrary.h"
 
 class Encoder
 {
@@ -24,9 +25,12 @@ private:
     HMODULE hLibrary;
     NV_ENCODE_API_FUNCTION_LIST functionList;
     NV_ENC_OPEN_ENCODE_SESSION_EX_PARAMS encodeParams;
+    Loader loader;
     void* encodePointer;
 
     bool InitializeNVEncoder(CUcontext context);
+    
+    
 
 };
 

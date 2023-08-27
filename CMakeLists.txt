@@ -33,6 +33,7 @@ add_executable (
     ${CMAKE_CURRENT_SOURCE_DIR}/src/GPU/deviceDetection.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/GPU/encoding.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Load/loadLibrary.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/Window/writing.cpp
     #${CMAKE_CURRENT_SOURCE_DIR}/src/hello.cu
 )
 
@@ -46,6 +47,7 @@ target_include_directories (
     ${CMAKE_CURRENT_SOURCE_DIR}/lib/NVIDIA/Video_Codec_SDK_12.1.14/interface/
     ${CMAKE_CURRENT_SOURCE_DIR}/lib/R535-Developer/
     ${CUDA_INCLUDE_DIRS}
+    ${CMAKE_CURRENT_SOURCE_DIR}/lib/freetype-windows-binaries/include/
 
     # User-made headers
     ${CMAKE_CURRENT_SOURCE_DIR}/include/
@@ -61,5 +63,6 @@ target_link_libraries (
     ${CMAKE_CURRENT_SOURCE_DIR}/lib/R535-Developer/amd64/nvapi64.lib
     OpenGL::GL
     DXGI
+    ${CMAKE_CURRENT_SOURCE_DIR}/lib/freetype-windows-binaries/release static/win32/freetype.lib
 )
 

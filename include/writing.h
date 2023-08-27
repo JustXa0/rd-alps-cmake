@@ -8,7 +8,8 @@
 // Find the list of error codes thrown by FreeType functions in fterrdef.h
 
 namespace Writing
-{
-    bool Initialize();
-    FT_Library library;
+{ 
+        bool IntializeFT(FT_Library library);
+        bool RetrieveFont(FT_Library library, FT_Face face~);
+        bool TestFTAlive(FT_Library library);
 }

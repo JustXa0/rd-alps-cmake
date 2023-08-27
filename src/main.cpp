@@ -18,9 +18,9 @@ int main() {
         Logger::getInstance().log_i("Hello World!");
     }
 
-    Monitor::Monitor();
-    GPU::GPU();
-    Encoder encoder;
+    //Monitor::Monitor();
+    //GPU::GPU();
+    //Encoder encoder;
 
     // Main loop
     while (!glfwWindowShouldClose(window)) {

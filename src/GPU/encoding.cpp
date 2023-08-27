@@ -11,6 +11,7 @@ Encoder::Encoder()
     loader.loadLibrary(L"nvEncodeAPI64.dll");
     loader.GetLibrary(&hLibrary);
     encodeParams = {};
+    functionList.version = NV_ENCODE_API_FUNCTION_LIST_VER;
 
     if(GPU::CreateCudaContext(device, context))
     {

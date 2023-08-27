@@ -2,7 +2,7 @@
 
 #include <Windows.h>            // Win32 API header
 #include <cuda.h>               // CUDA header
-#include <cuda_runtime.h>   // CUDA runtime API header
+#include <cuda_runtime.h>       // CUDA runtime API header
 #include <nvapi.h>              // NVAPI header
 #include <dxgi.h>               // DirectX API header
 #include <vector>               // Standard C header
@@ -66,6 +66,7 @@ class GPU
         bool GetCudaVersion(uint16_t index, int& cudaOut);
         bool GetDriverVersion(uint16_t index, int& driverOut);
         static bool CreateCudaContext(CUdevice device, CUcontext context);
+        static bool CreateDirectXInstance();
 
     private:
         GPUInfo gInfo;

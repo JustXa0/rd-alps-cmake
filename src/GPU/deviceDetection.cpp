@@ -369,6 +369,11 @@ bool GPU::CreateCudaContext(CUdevice device, CUcontext context)
     return true;
 }
 
+bool GPU::CreateDirectXInterface()
+{
+    
+}
+
 bool GPU::GetIndex(uint16_t& index)
 {
     index = gInfo.size;

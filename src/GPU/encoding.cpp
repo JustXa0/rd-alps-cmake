@@ -11,18 +11,14 @@ Encoder::Encoder()
     loader.loadLibrary(L"nvEncodeAPI64.dll");
     loader.GetLibrary(&hLibrary);
 
-<<<<<<< HEAD
-    encodeParams = {};
-
-    encodeParams.version = NV_ENCODE_API_FUNCTION_LIST_VER;
-    encodeParams.reserved = 0;
-    encodeParams.apiVersion = NVENCAPI_VERSION;
-
-    if (GPU::CreateCudaContext(device, context))
-=======
     if(GPU::CreateCudaContext(device, context))
->>>>>>> ec20f13bcd1ea34e242e933a12a6df10cd8d2ae7
     {
+        encodeParams.apiVersion = NV_ENC_OPEN_ENCODE_SESSION_EX_PARAMS_VER;
+        encodeParams.deviceType = NV_ENC_DEVICE_TYPE_CUDA;
+        encodeParams.device = *context;
+        encodeParams.reserved = 0;
+        encodeParams.apiVersion = NVENCAPI_VERSION;
+        encodeParams.reserved1 = 0;
         Encoder::InitializeNVEncoder(context);
     }
 
@@ -57,7 +53,7 @@ bool Encoder::InitializeNVEncoder(CUcontext contextIn)
 
     if (NvEncodeAPICreateInstance == NULL) {
         Logger::getInstance().log_e("ERROR GETTING NvEncodeAPICreateInstance FUNCTION");
-        lodaer.~Lodaer();
+        loader.~Loader();
         return false;
     }
 
@@ -67,27 +63,25 @@ bool Encoder::InitializeNVEncoder(CUcontext contextIn)
        return false;
    }
 
-   if (contextIn != nullptr)
+   NVENCSTATUS status = functionList.nvEncOpenEncodeSessionEx(&encodeParams, &encodePointer);
+   if (status != NV_ENC_SUCCESS)
    {
-        encodeParams.version = NV_ENC_OPEN_ENCODE_SESSION_EX_PARAMS_VER;
-        encodeParams.deviceType = NV_ENC_DEVICE_TYPE_CUDA;
-        encodeParams.device = contextIn;
-        encodeParams.apiVersion = NVENCAPI_VERSION;
+    Logger::getInstance().log_e("ERROR OPENING ENCODE SESSION");
+    Logger::getInstance().log_e(functionList.nvEncGetLastErrorString(encodePointer));
+    Logger::getInstance().log_e(status);
+    functionList.nvEncDestroyEncoder(encodePointer);
+    loader.~Loader();
+    return false;
    }
-   else 
-   {
-       Logger::getInstance().log_e("CUDA CONTEXT IS SET TO NULLPTR");
-        return false;
-   }
-
-    if (functionList.nvEncOpenEncodeSessionEx(&encodeParams, &encodePointer) != NV_ENC_SUCCESS)
-    {
-        Logger::getInstance().log_e("ERROR OPENING ENCODE SESSION");
-        Logger::getInstance().log_e(functionList.nvEncGetLastErrorString(encodePointer));
-        functionList.nvEncDestroyEncoder(encodePointer);
-        loader.~Loader();
-        return false;
-    }
+   
+    //if (functionList.nvEncOpenEncodeSessionEx(&encodeParams, &encodePointer) != NV_ENC_SUCCESS)
+    //{
+        //Logger::getInstance().log_e("ERROR OPENING ENCODE SESSION");
+        //Logger::getInstance().log_e(functionList.nvEncGetLastErrorString(encodePointer));
+        //functionList.nvEncDestroyEncoder(encodePointer);
+        //loader.~Loader();
+        //return false;
+    //}
    
     // Initialization was successful, starting tuning selection
     Logger::getInstance().log_i("NVEncoder initialized, starting tuning selection");

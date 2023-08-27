@@ -29,6 +29,7 @@ private:
     void* encodePointer;
 
     bool InitializeNVEncoder(CUcontext context);
+    bool InitializeNVEncoder();
     
     
 

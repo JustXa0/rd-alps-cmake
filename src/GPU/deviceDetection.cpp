@@ -318,7 +318,7 @@ bool GPU::RetrieveDriverVersion()
     return true;
 }
 
-bool GPU::CreateCudaContext(CUdevice device, CUcontext context)
+bool GPU::CreateCudaContext(CUdevice device, CUcontext &context)
 {
     CUresult result = cuInit(0);
     if (result != CUDA_SUCCESS)
@@ -358,6 +358,7 @@ bool GPU::CreateCudaContext(CUdevice device, CUcontext context)
         Logger::getInstance().log_e("CONTEXT WAS NOT PROPERLY INITALIZED");
         return false;
     }
+
     result = cuCtxCreate(&context, 0, device);
     if (result != CUDA_SUCCESS)
     {
@@ -366,6 +367,11 @@ bool GPU::CreateCudaContext(CUdevice device, CUcontext context)
     }
 
     Logger::getInstance().log_i("Floating CUDA context created successfully");
+    return true;
+}
+
+bool GPU::CreateDirectXInterface()
+{
     return true;
 }
 

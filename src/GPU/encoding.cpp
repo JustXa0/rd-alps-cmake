@@ -10,15 +10,15 @@ Encoder::Encoder()
 
     loader.loadLibrary(L"nvEncodeAPI64.dll");
     loader.GetLibrary(&hLibrary);
+    encodeParams = {};
 
     if(GPU::CreateCudaContext(device, context))
     {
         encodeParams.apiVersion = NV_ENC_OPEN_ENCODE_SESSION_EX_PARAMS_VER;
         encodeParams.deviceType = NV_ENC_DEVICE_TYPE_CUDA;
-        encodeParams.device = *context;
+        encodeParams.device = &context;
         encodeParams.reserved = 0;
         encodeParams.apiVersion = NVENCAPI_VERSION;
-        encodeParams.reserved1 = 0;
         Encoder::InitializeNVEncoder(context);
     }
 

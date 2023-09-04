@@ -10,6 +10,6 @@
 namespace Writing
 { 
         bool IntializeFT(FT_Library library);
-        bool RetrieveFont(FT_Library library, FT_Face face~);
+        bool RetrieveFont(FT_Library library, FT_Face face);
         bool TestFTAlive(FT_Library library);
 }

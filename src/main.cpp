@@ -34,7 +34,7 @@ int main() {
     }
 
     // Cleanup and exit
-    encoder.~Encoder();
+    //encoder.~Encoder();
     glfwDestroyWindow(window);
     glfwTerminate();
     return 0;

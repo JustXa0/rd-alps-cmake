@@ -63,6 +63,6 @@ target_link_libraries (
     ${CMAKE_CURRENT_SOURCE_DIR}/lib/R535-Developer/amd64/nvapi64.lib
     OpenGL::GL
     DXGI
-    ${CMAKE_CURRENT_SOURCE_DIR}/lib/freetype-windows-binaries/release static/win32/freetype.lib
+    ${CMAKE_CURRENT_SOURCE_DIR}/lib/freetype-windows-binaries/release dll/win64/freetype.lib
 )
 

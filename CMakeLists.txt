@@ -4,7 +4,6 @@ project ("alps" LANGUAGES CUDA CXX C)
 
 find_library (NVAPI_LIBRARY NAMES nvapi64)
 
-find_package (OpenGL REQUIRED)
 find_package (CUDAToolkit REQUIRED)
 
 if (WIN32)
@@ -27,13 +26,15 @@ endif()
 set(CMAKE_CUDA_STANDARD 14)
 
 add_executable (
-    ALPS
+    ALPS WIN32
     ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Log/logger.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/GPU/deviceDetection.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/GPU/encoding.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Load/loadLibrary.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/Window/writing.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/small.ico
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/rd-alps.rc
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/rd-alps.ico
     #${CMAKE_CURRENT_SOURCE_DIR}/src/hello.cu
 )
 
@@ -55,14 +56,15 @@ target_include_directories (
 
 target_link_libraries (
     ALPS
-    ${CMAKE_CURRENT_SOURCE_DIR}/lib/glfw/build/src/Debug/glfw3.lib
     CUDA::cudart
     CUDA::cuda_driver
     ${CUVID_LIB}
     ${NVENCODEAPI_LIB}
     ${CMAKE_CURRENT_SOURCE_DIR}/lib/R535-Developer/amd64/nvapi64.lib
-    OpenGL::GL
     DXGI
-    ${CMAKE_CURRENT_SOURCE_DIR}/lib/freetype-windows-binaries/release dll/win64/freetype.lib
 )
+
+target_sources (ALPS PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/rd-alps.rc)
+
+set_source_files_properties (${CMAKE_CURRENT_SOURCE_DIR}/src/rd-alps.rc PROPERTIES WIN32_EXECUTABLE TRUE)
 

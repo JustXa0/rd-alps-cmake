@@ -1,62 +1,70 @@
-# CMakeList.txt : CMake project for Project ALPS, include source and define
-# project specific logic here.
-#
-cmake_minimum_required (VERSION 3.27)
+cmake_minimum_required (VERSION 3.20 FATAL_ERROR)
 
+project ("alps" LANGUAGES CUDA CXX C)
 
-# Enable Hot Reload for MSVC compilers if supported.
-if (POLICY CMP0141)
-  cmake_policy(SET CMP0141 NEW)
-  set(CMAKE_MSVC_DEBUG_INFORMATION_FORMAT "$<IF:$<AND:$<C_COMPILER_ID:MSVC>,$<CXX_COMPILER_ID:MSVC>>,$<$<CONFIG:Debug,RelWithDebInfo>:EditAndContinue>,$<$<CONFIG:Debug,RelWithDebInfo>:ProgramDatabase>>")
+find_library (NVAPI_LIBRARY NAMES nvapi64)
+
+find_package (CUDAToolkit REQUIRED)
+
+if (WIN32)
+    add_definitions (-DUNICODE -D_UNICODE)
+endif ()
+
+if (WIN32)
+    if(CMAKE_SIZEOF_VOID_P EQUAL 8)
+        Set(CUVID_LIB ${CMAKE_CURRENT_SOURCE_DIR}/lib/NVIDIA/Video_Codec_SDK_12.1.14/Lib/x64/nvcuvid.lib)
+        set(NVENCODEAPI_LIB ${CMAKE_CURRENT_SOURCE_DIR}/lib/NVIDIA/Video_Codec_SDK_12.1.14/Lib/x64/nvencodeapi.lib)
+    else()
+        Set(CUVID_LIB ${CMAKE_CURRENT_SOURCE_DIR}/lib/NVIDIA/Video_Codec_SDK_12.1.14/Lib/Win32/nvcuvid.lib)
+        set(NVENCODEAPI_LIB ${CMAKE_CURRENT_SOURCE_DIR}/lib/NVIDIA/Video_Codec_SDK_12.1.14/Lib/Win32/nvencodeapi.lib)
+    endif()
+else()
+    find_library(CUVID_LIB nvcuvid)
+    find_library(NVENCODEAPI_LIB nvidia-encode)
 endif()
 
-# Set compiler files
-if (WIN32)
-  add_definitions (-DUNICODE -D_UNICODE)
-endif ()
-
-# Set C++ standard for CUDA
-if (NOT DEFINED CMAKE_CUDA_STANDARD)
-  set (CMAKE_CUDA_STANDARD 12.2)
-  set (CMAKE_CUDA_STANDARD REQUIRED)
-endif ()
-
-set (CMAKE_CUDA_ARCHITECTURES "80;86;87")
-
-project ("ALPS" LANGUAGES C CXX )
-
-# Add C++ source files
-add_subdirectory (${CMAKE_CURRENT_SOURCE_DIR}/src/C++/)
-
-# Add CUDA source files
-# add_subdirectory (${CMAKE_CURRENT_SOURCE_DIR}/src/CUDA)
+set(CMAKE_CUDA_STANDARD 14)
 
 add_executable (
-  ALPS WIN32
-  ${CMAKE_CURRENT_SOURCE_DIR}/src/rd-alps.cpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/src/rd-alps.rc
-  ${CMAKE_CURRENT_SOURCE_DIR}/src/rd-alps.ico
-  ${CMAKE_CURRENT_SOURCE_DIR}/src/small.ico
-  ${CMAKE_CURRENT_SOURCE_DIR}/src/startup.cpp
+    ALPS WIN32
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/Log/logger.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/GPU/deviceDetection.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/GPU/encoding.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/Load/loadLibrary.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/small.ico
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/rd-alps.rc
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/rd-alps.ico
+    #${CMAKE_CURRENT_SOURCE_DIR}/src/hello.cu
 )
 
-# Include user-made headers
-target_include_directories (ALPS BEFORE PRIVATE 
-  ${CMAKE_CURRENT_SOURCE_DIR}/include/Capture
-  ${CMAKE_CURRENT_SOURCE_DIR}/include/Console
-  ${CMAKE_CURRENT_SOURCE_DIR}/include/Number
-  ${CMAKE_CURRENT_SOURCE_DIR}/include/Device
-  ${CMAKE_CURRENT_SOURCE_DIR}/include/Monitor
-  ${CMAKE_CURRENT_SOURCE_DIR}/include/Text
-  ${CMAKE_CURRENT_SOURCE_DIR}/include
+set_target_properties(ALPS PROPERTIES CUDA_SEPARABLE_COMPILATION ON)
+#target_compile_options(ALPS PRIVATE "/MT")
+
+target_include_directories (
+    ALPS BEFORE PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}/lib/spdlog/include/
+    ${CMAKE_CURRENT_SOURCE_DIR}/lib/glfw/include/
+    ${CMAKE_CURRENT_SOURCE_DIR}/lib/NVIDIA/Video_Codec_SDK_12.1.14/interface/
+    ${CMAKE_CURRENT_SOURCE_DIR}/lib/R535-Developer/
+    ${CUDA_INCLUDE_DIRS}
+    ${CMAKE_CURRENT_SOURCE_DIR}/lib/freetype-windows-binaries/include/
+
+    # User-made headers
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/
 )
 
-# Link libraries built in the src/C++ file directory
-target_link_libraries (ALPS PRIVATE CONSOLE DEVICE MONITOR NUMBER TEXT)
-
-# Link DirectX libraries
-target_link_libraries(ALPS PRIVATE DXGI)
+target_link_libraries (
+    ALPS
+    CUDA::cudart
+    CUDA::cuda_driver
+    ${CUVID_LIB}
+    ${NVENCODEAPI_LIB}
+    ${CMAKE_CURRENT_SOURCE_DIR}/lib/R535-Developer/amd64/nvapi64.lib
+    DXGI
+)
 
 target_sources (ALPS PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/rd-alps.rc)
 
 set_source_files_properties (${CMAKE_CURRENT_SOURCE_DIR}/src/rd-alps.rc PROPERTIES WIN32_EXECUTABLE TRUE)
+

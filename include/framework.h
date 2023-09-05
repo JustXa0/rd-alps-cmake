@@ -1,6 +1,3 @@
-﻿// ALPS CMake Version.h : Include file for standard system include files,
-// or project specific include files.
-
 #pragma once
 
 #include <iostream>
@@ -16,3 +13,8 @@
 #include <tchar.h>
 #include <io.h>
 #include <fcntl.h>
+
+#include <nvEncodeAPI.h>
+#include "logger.h"
+#include "deviceDetection.h"
+#include "encoding.h"

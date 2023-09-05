@@ -1,4 +1,2 @@
-#CMake compiler files
-out/
-.vs/
+build/
 .vscode/

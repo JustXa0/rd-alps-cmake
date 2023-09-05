@@ -1,0 +1,9 @@
+[submodule "lib/glfw"]
+	path = lib/glfw
+	url = https://github.com/glfw/glfw.git
+[submodule "lib/spdlog"]
+	path = lib/spdlog
+	url = https://github.com/gabime/spdlog.git
+[submodule "lib/freetype-windows-binaries"]
+	path = lib/freetype-windows-binaries
+	url = https://github.com/ubawurinna/freetype-windows-binaries.git

@@ -66,7 +66,6 @@ class GPU
         bool GetCudaVersion(uint16_t index, int& cudaOut);
         bool GetDriverVersion(uint16_t index, int& driverOut);
         static bool CreateCudaContext(CUdevice device, CUcontext &context);
-        static bool CreateDirectXInterface();
 
     private:
         GPUInfo gInfo;

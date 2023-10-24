@@ -24,7 +24,6 @@ Encoder::Encoder()
     }
 
 
-    // TODO: write method for starting nvencoder with directx support
     else {
         encodeParams.device = NULL;
         encodeParams.deviceType = NV_ENC_DEVICE_TYPE_DIRECTX;
@@ -106,7 +105,6 @@ bool Encoder::InitializeNVEncoder(CUcontext contextIn)
     }
 }
 
-// TODO: implement DirectX support 
 bool Encoder::InitializeNVEncoder()
 {
     typedef NVENCSTATUS(NVENCAPI *PFN_NVENC_CREATE_INSTANCE)(NV_ENCODE_API_FUNCTION_LIST*);  // Function pointer type

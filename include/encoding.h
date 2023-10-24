@@ -15,6 +15,7 @@
 
 class Encoder
 {
+
 public:
     Encoder();
     ~Encoder();
@@ -30,8 +31,5 @@ private:
 
     bool InitializeNVEncoder(CUcontext context);
     bool InitializeNVEncoder();
-    
-    
-
 };
 
